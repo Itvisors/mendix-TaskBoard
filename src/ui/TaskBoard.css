@@ -1,0 +1,48 @@
+/*
+    Task board CSS
+*/
+.taskBoardContainer {
+	border: 1px solid #D7D7D7;
+}
+
+.taskBoardContainerVertical {
+    display: flex;
+}
+
+.taskBoardColumn {
+	border: 1px solid #D7D7D7;
+    margin: 8px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+}
+
+.taskBoardColumnVertical {
+    width: 220px;
+    display: flex;
+    flex-direction: column; /* Flex box with column direction so task list can grow vertically. */
+}
+
+.taskBoardItemList {
+    padding: 8px;
+    transition: background-color 0.2s ease;
+    flex-grow: 1; /* Needs to grow to fill available space. */
+}
+
+.taskBoardItemListDraggingOver {
+    background-color: "skyblue";
+}
+
+.taskBoardItemListVertical {
+    min-height: 100px; /* Make sure there is a droppable area. */
+}
+
+.taskBoardItem {
+	border: 1px solid #D7D7D7;
+    border-radius: 2px;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.taskBoardItemDragging {
+    background-color: "lightgreen";
+}
