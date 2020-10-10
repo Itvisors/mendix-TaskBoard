@@ -8,6 +8,10 @@
 .taskBoardContainerVertical {
     display: flex;
 }
+.taskBoardItemList,
+.taskBoardItem {
+    transition: background-color 0.2s ease;
+}
 
 .taskBoardColumn {
 	border: 1px solid #D7D7D7;
@@ -29,7 +33,7 @@
 }
 
 .taskBoardItemListDraggingOver {
-    background-color: "skyblue";
+    background-color: skyblue;
 }
 
 .taskBoardItemListVertical {
@@ -41,8 +45,13 @@
     border-radius: 2px;
     padding: 8px;
     margin-bottom: 8px;
+    background-color: white;
 }
 
 .taskBoardItemDragging {
-    background-color: "lightgreen";
+    background-color: lightgreen;
+}
+
+.taskBoardItemDragDisabled {
+    background-color: grey;
 }
