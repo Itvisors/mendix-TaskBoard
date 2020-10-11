@@ -20,6 +20,7 @@ public class TaskBoardContext
 	 */
 	public enum MemberNames
 	{
+		TaskBoardContext_TaskBoard("TestModule.TaskBoardContext_TaskBoard"),
 		TaskBoardContext_Account("TestModule.TaskBoardContext_Account");
 
 		private java.lang.String metaName;
@@ -115,6 +116,49 @@ public class TaskBoardContext
 	{
 		com.mendix.core.Core.delete(context, getMendixObject());
 	}
+	/**
+	 * @return value of TaskBoardContext_TaskBoard
+	 */
+	public final testmodule.proxies.TaskBoard getTaskBoardContext_TaskBoard() throws com.mendix.core.CoreException
+	{
+		return getTaskBoardContext_TaskBoard(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of TaskBoardContext_TaskBoard
+	 */
+	public final testmodule.proxies.TaskBoard getTaskBoardContext_TaskBoard(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
+	{
+		testmodule.proxies.TaskBoard result = null;
+		com.mendix.systemwideinterfaces.core.IMendixIdentifier identifier = getMendixObject().getValue(context, MemberNames.TaskBoardContext_TaskBoard.toString());
+		if (identifier != null)
+			result = testmodule.proxies.TaskBoard.load(context, identifier);
+		return result;
+	}
+
+	/**
+	 * Set value of TaskBoardContext_TaskBoard
+	 * @param taskboardcontext_taskboard
+	 */
+	public final void setTaskBoardContext_TaskBoard(testmodule.proxies.TaskBoard taskboardcontext_taskboard)
+	{
+		setTaskBoardContext_TaskBoard(getContext(), taskboardcontext_taskboard);
+	}
+
+	/**
+	 * Set value of TaskBoardContext_TaskBoard
+	 * @param context
+	 * @param taskboardcontext_taskboard
+	 */
+	public final void setTaskBoardContext_TaskBoard(com.mendix.systemwideinterfaces.core.IContext context, testmodule.proxies.TaskBoard taskboardcontext_taskboard)
+	{
+		if (taskboardcontext_taskboard == null)
+			getMendixObject().setValue(context, MemberNames.TaskBoardContext_TaskBoard.toString(), null);
+		else
+			getMendixObject().setValue(context, MemberNames.TaskBoardContext_TaskBoard.toString(), taskboardcontext_taskboard.getMendixObject().getId());
+	}
+
 	/**
 	 * @return value of TaskBoardContext_Account
 	 */

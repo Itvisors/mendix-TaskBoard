@@ -7,11 +7,74 @@
     <description>Task board with DnD</description>
     <icon/>
     <properties>
-        <propertyGroup caption="General">
-            <property key="sampleText" type="string" required="false">
-                <caption>Default value</caption>
-                <description>Sample text input</description>
+    
+        <!-- Datasource properties -->
+
+        <propertyGroup caption="Datasource">
+            <property key="columnDatasource" type="datasource" isList="true">
+                <caption>Column data source</caption>
+                <description></description>
             </property>
+            <property key="columnWidgets" type="widgets" dataSource="columnDatasource">
+                <caption>Column content</caption>
+                <description></description>
+            </property>
+            <property key="columnIdAttr" type="attribute" dataSource="columnDatasource">
+                <caption>Column ID</caption>
+                <description>Column ID attribute</description>
+                <attributeTypes>
+                    <attributeType name="AutoNumber"/>
+                    <attributeType name="Enum"/>
+                    <attributeType name="Integer"/>
+                    <attributeType name="Long"/>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+
+            <property key="itemDatasource" type="datasource" isList="true">
+                <caption>Item data source</caption>
+                <description></description>
+            </property>
+            <property key="itemWidgets" type="widgets" dataSource="itemDatasource">
+                <caption>Item content</caption>
+                <description></description>
+            </property>
+            <property key="itemIdAttr" type="attribute" dataSource="itemDatasource">
+                <caption>Item ID</caption>
+                <description>Item ID attribute</description>
+                <attributeTypes>
+                    <attributeType name="AutoNumber"/>
+                    <attributeType name="Enum"/>
+                    <attributeType name="Integer"/>
+                    <attributeType name="Long"/>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+            <property key="itemSqeNbrAttr" type="attribute" dataSource="itemDatasource">
+                <caption>Item seq, nbr.</caption>
+                <description>Item sequence number attribute, will be updated after dropping an item</description>
+                <attributeTypes>
+                    <attributeType name="Integer"/>
+                    <attributeType name="Long"/>
+                </attributeTypes>
+            </property>
+            <property key="linkedToColumnIdAttr" type="attribute" dataSource="itemDatasource">
+                <caption>In column</caption>
+                <description>Column ID attribute of the column the item is linked to.</description>
+                <attributeTypes>
+                    <attributeType name="AutoNumber"/>
+                    <attributeType name="Enum"/>
+                    <attributeType name="Integer"/>
+                    <attributeType name="Long"/>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+            <property key="itemIsDragDisabledAttr" type="expression" dataSource="itemDatasource" required="false">
+                <caption>Is drag disabled</caption>
+                <description>Whether dragging this item is disabled. Optional. By default item is always draggable.</description>
+                <returnType type="Boolean" />
+            </property>
+
         </propertyGroup>
     </properties>
 </widget>

@@ -1,18 +1,21 @@
 import { Component, ReactNode, createElement } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { ItemData } from "../types/CustomTypes";
+import { ColumnItemData } from "../types/CustomTypes";
+import { ListWidgetValue } from "mendix";
 
 export interface ItemProps {
-    itemData: ItemData;
+    columnItemData: ColumnItemData;
     index: number;
+    itemWidgets: ListWidgetValue;
 }
 
 export class Item extends Component<ItemProps> {
     render(): ReactNode {
         const isDragDisabled = false;
+        const { columnItemData } = this.props;
         return (
             <Draggable
-                draggableId={this.props.itemData.itemId}
+                draggableId={columnItemData.itemData.itemId}
                 index={this.props.index}
                 isDragDisabled={isDragDisabled}
             >
@@ -21,7 +24,7 @@ export class Item extends Component<ItemProps> {
                     if (snapshot.isDragging) {
                         className += " taskBoardItemDragging";
                     }
-                    if (this.props.itemData.isDragDisabled) {
+                    if (columnItemData.itemData.isDragDisabled) {
                         className += " taskBoardItemDragDisabled";
                     }
                     return (
@@ -30,8 +33,9 @@ export class Item extends Component<ItemProps> {
                             {...provided.dragHandleProps}
                             ref={provided.innerRef}
                             className={className}
+                            data-itemid={columnItemData.itemData.itemId}
                         >
-                            <span>{this.props.itemData.itemId}</span>
+                            {this.props.itemWidgets(columnItemData.itemMendixObject)}
                         </div>
                     );
                 }}

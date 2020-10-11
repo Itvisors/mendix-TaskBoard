@@ -15,17 +15,69 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
 public class Microflows
 {
 	// These are the microflows for the TestModule module
+	public static void aCT_TaskBoard_Edit(IContext context, testmodule.proxies.TaskBoard _taskBoard)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("TaskBoard", _taskBoard == null ? null : _taskBoard.getMendixObject());
+		Core.microflowCall("TestModule.ACT_TaskBoard_Edit").withParams(params).execute(context);
+	}
+	public static void aCT_TaskBoard_NewItem(IContext context, testmodule.proxies.TaskBoard _taskBoard)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("TaskBoard", _taskBoard == null ? null : _taskBoard.getMendixObject());
+		Core.microflowCall("TestModule.ACT_TaskBoard_NewItem").withParams(params).execute(context);
+	}
+	public static void aCT_TaskBoard_SaveNew(IContext context, testmodule.proxies.TaskBoard _taskBoard)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("TaskBoard", _taskBoard == null ? null : _taskBoard.getMendixObject());
+		Core.microflowCall("TestModule.ACT_TaskBoard_SaveNew").withParams(params).execute(context);
+	}
 	public static testmodule.proxies.TaskBoardContext dS_TaskBoardContext(IContext context)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();
 		IMendixObject result = (IMendixObject)Core.microflowCall("TestModule.DS_TaskBoardContext").withParams(params).execute(context);
 		return result == null ? null : testmodule.proxies.TaskBoardContext.initialize(context, result);
 	}
+	public static java.util.List<testmodule.proxies.Column> dSL_TaskBoardContext_Columns(IContext context, testmodule.proxies.TaskBoardContext _taskBoardContext)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("TaskBoardContext", _taskBoardContext == null ? null : _taskBoardContext.getMendixObject());
+		java.util.List<IMendixObject> objs = Core.microflowCall("TestModule.DSL_TaskBoardContext_Columns").withParams(params).execute(context);
+		java.util.List<testmodule.proxies.Column> result = null;
+		if (objs != null)
+		{
+			result = new java.util.ArrayList<>();
+			for (IMendixObject obj : objs)
+				result.add(testmodule.proxies.Column.initialize(context, obj));
+		}
+		return result;
+	}
+	public static java.util.List<testmodule.proxies.Item> dSL_TaskBoardContext_Items(IContext context, testmodule.proxies.TaskBoardContext _taskBoardContext)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("TaskBoardContext", _taskBoardContext == null ? null : _taskBoardContext.getMendixObject());
+		java.util.List<IMendixObject> objs = Core.microflowCall("TestModule.DSL_TaskBoardContext_Items").withParams(params).execute(context);
+		java.util.List<testmodule.proxies.Item> result = null;
+		if (objs != null)
+		{
+			result = new java.util.ArrayList<>();
+			for (IMendixObject obj : objs)
+				result.add(testmodule.proxies.Item.initialize(context, obj));
+		}
+		return result;
+	}
 	public static administration.proxies.Account sUB_GetCurrentAccount(IContext context)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();
 		IMendixObject result = (IMendixObject)Core.microflowCall("TestModule.SUB_GetCurrentAccount").withParams(params).execute(context);
 		return result == null ? null : administration.proxies.Account.initialize(context, result);
+	}
+	public static void sUB_TaskBoard_OpenEditPage(IContext context, testmodule.proxies.TaskBoard _taskBoard)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("TaskBoard", _taskBoard == null ? null : _taskBoard.getMendixObject());
+		Core.microflowCall("TestModule.SUB_TaskBoard_OpenEditPage").withParams(params).execute(context);
 	}
 	public static testmodule.proxies.TaskBoardContext sUB_TaskBoardContext_GetOrCreate(IContext context)
 	{

@@ -1,54 +1,28 @@
 import { Component, ReactNode, createElement } from "react";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { ValueStatus, ObjectItem } from "mendix";
 
 import { TaskBoardContainerProps } from "../typings/TaskBoardProps";
 import { Column } from "./components/Column";
-import { ColumnData, ItemData, TaskBoardData } from "./types/CustomTypes";
+import { ColumnData, ItemData, ColumnItemData } from "./types/CustomTypes";
 
 import "./ui/TaskBoard.css";
 
 export default class TaskBoard extends Component<TaskBoardContainerProps> {
-    private taskBoardData: TaskBoardData;
+    private columnMendixDataMap = new Map<string, ObjectItem>();
+    private itemMendixDataMap = new Map<string, ObjectItem>();
+    private itemMap = new Map<string, ItemData>();
+    private columnArray: ColumnData[] = [];
+    private columnMap = new Map<string, ColumnData>();
+    private columnIndexMap = new Map<string, number>();
+
+    private COLUMN_ID_PREFIX = "col-";
+    private ITEM_ID_PREFIX = "item-";
 
     // Temp state update to force a render
     state = {
         lastUpdated: new Date()
     };
-
-    constructor(props: TaskBoardContainerProps) {
-        super(props);
-
-        // Create hardcoded data for first tests.
-        this.taskBoardData = {
-            itemMap: new Map<string, ItemData>(),
-            columnArray: [
-                {
-                    columnId: "column-1",
-                    itemKeyArray: ["item-1", "item-2", "item-3", "item-4"]
-                },
-                {
-                    columnId: "column-2",
-                    itemKeyArray: []
-                },
-                {
-                    columnId: "column-3",
-                    itemKeyArray: []
-                }
-            ],
-            columnIndexMap: new Map<string, number>()
-        };
-        // Items
-        this.taskBoardData.itemMap
-            .set("item-1", { itemId: "item-1" })
-            .set("item-2", { itemId: "item-2" })
-            .set("item-3", { itemId: "item-3" })
-            .set("item-4", { itemId: "item-4" });
-
-        // Build map of key to array index. This bit we will also need with real data.
-        this.taskBoardData.columnArray.forEach((columnData, index) => {
-            this.taskBoardData.columnIndexMap.set(columnData.columnId, index);
-        });
-    }
 
     onDragEnd = (result: DropResult): void => {
         const { destination, source, draggableId } = result;
@@ -64,13 +38,13 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         }
 
         // Retrieve the start and finish columns from the state
-        const startIndex = this.taskBoardData.columnIndexMap.get(source.droppableId);
-        const finishIndex = this.taskBoardData.columnIndexMap.get(destination.droppableId);
+        const startIndex = this.columnIndexMap.get(source.droppableId);
+        const finishIndex = this.columnIndexMap.get(destination.droppableId);
         if (startIndex === undefined || finishIndex === undefined) {
             return;
         }
-        const start = this.taskBoardData.columnArray[startIndex];
-        const finish = this.taskBoardData.columnArray[finishIndex];
+        const start = this.columnArray[startIndex];
+        const finish = this.columnArray[finishIndex];
 
         // Take the element from the start array
         start.itemKeyArray.splice(source.index, 1);
@@ -93,6 +67,8 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     render(): ReactNode {
         console.info("render");
         const isVertical = true; // set from widget property
+        const { columnWidgets, itemWidgets } = this.props;
+        this.getData();
         let className = "taskBoardContainer " + this.props.class;
         if (isVertical) {
             className += " taskBoardContainerVertical";
@@ -100,14 +76,17 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
                 <div className={className}>
-                    {this.taskBoardData.columnArray.map(columnData => {
+                    {this.columnArray.map(columnData => {
                         return (
                             <Column
                                 key={columnData.columnId}
                                 columnData={columnData}
+                                columnMendixObject={this.columnMendixDataMap.get(columnData.columnId)}
                                 items={this.getItems(columnData)}
                                 isDropDisabled={false}
                                 isVertical={isVertical}
+                                columnWidgets={columnWidgets}
+                                itemWidgets={itemWidgets}
                             />
                         );
                     })}
@@ -116,16 +95,102 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         );
     }
 
-    getItems(columnData: ColumnData): ItemData[] {
-        const items: ItemData[] = [];
+    getItems(columnData: ColumnData): ColumnItemData[] {
+        const items: ColumnItemData[] = [];
         // A simple itemKeyArray.map() will not work with TypeScript because it complains about possible undefined values.
         // So a bit more old school
         for (const itemKey of columnData.itemKeyArray) {
-            const item = this.taskBoardData.itemMap.get(itemKey);
-            if (item) {
-                items.push(item);
+            const itemData = this.itemMap.get(itemKey);
+            const itemMendixObject = this.itemMendixDataMap.get(itemKey);
+            if (itemData && itemMendixObject) {
+                items.push({
+                    itemData,
+                    itemMendixObject
+                });
             }
         }
         return items;
+    }
+
+    getData(): void {
+        const { itemDatasource, columnDatasource } = this.props;
+
+        if (itemDatasource.status !== ValueStatus.Available || columnDatasource.status !== ValueStatus.Available) {
+            return;
+        }
+
+        this.columnMendixDataMap.clear();
+        this.itemMendixDataMap.clear();
+        this.itemMap.clear();
+        this.columnArray = [];
+        this.columnIndexMap.clear();
+
+        this.getColumnData();
+        this.getItemData();
+    }
+
+    getColumnData(): void {
+        const { columnDatasource, columnIdAttr } = this.props;
+
+        if (!columnDatasource.items) {
+            return;
+        }
+
+        // We need a column array as well as a column map. So write the column data object to an array and a map.
+        this.columnArray = columnDatasource.items.map(columnObject => {
+            const columnId = this.COLUMN_ID_PREFIX + columnIdAttr(columnObject).value;
+
+            // Save Mendix object to map for easy access.
+            this.columnMendixDataMap.set(columnId, columnObject);
+
+            // Create column data object;
+            const columnData: ColumnData = {
+                columnId,
+                itemKeyArray: []
+            };
+            // Save it in the map too.
+            this.columnMap.set(columnId, columnData);
+
+            return columnData;
+        });
+
+        // Build map of key to array index.
+        this.columnArray.forEach((columnData, index) => {
+            this.columnIndexMap.set(columnData.columnId, index);
+        });
+    }
+
+    getItemData(): void {
+        const { itemDatasource, itemIdAttr, linkedToColumnIdAttr, itemIsDragDisabledAttr } = this.props;
+
+        if (!itemDatasource.items) {
+            return;
+        }
+
+        for (const itemObject of itemDatasource.items) {
+            const itemId = this.ITEM_ID_PREFIX + itemIdAttr(itemObject).value;
+
+            // Save Mendix object to map for easy access.
+            this.itemMendixDataMap.set(itemId, itemObject);
+
+            // Create item data object
+            const itemData: ItemData = {
+                itemId,
+                isDragDisabled: itemIsDragDisabledAttr ? itemIsDragDisabledAttr(itemObject).value : false
+            };
+
+            // Save it in the map
+            this.itemMap.set(itemId, itemData);
+
+            // If item is linked to a column, add item id to column item key array.
+            const linkedToColumnIdAttrValue = linkedToColumnIdAttr(itemObject).value;
+            if (linkedToColumnIdAttrValue) {
+                const columnId = this.COLUMN_ID_PREFIX + linkedToColumnIdAttrValue;
+                const columnData = this.columnMap.get(columnId);
+                if (columnData) {
+                    columnData.itemKeyArray.push(itemId);
+                }
+            }
+        }
     }
 }

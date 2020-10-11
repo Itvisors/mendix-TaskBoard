@@ -1,3 +1,5 @@
+import { ObjectItem } from "mendix";
+
 export interface ItemData {
     itemId: string;
     isDragDisabled?: boolean;
@@ -8,8 +10,7 @@ export interface ColumnData {
     itemKeyArray: string[];
 }
 
-export interface TaskBoardData {
-    itemMap: Map<string, ItemData>;
-    columnArray: ColumnData[];
-    columnIndexMap: Map<string, number>;
+export interface ColumnItemData {
+    itemData: ItemData;
+    itemMendixObject: ObjectItem;
 }
