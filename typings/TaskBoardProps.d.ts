@@ -4,7 +4,7 @@
  * @author Mendix UI Content Team
  */
 import { ComponentType, CSSProperties } from "react";
-import { ListValue, ListAttributeValue, ListExpressionValue, ListWidgetValue } from "mendix";
+import { EditableValue, ListValue, ListActionValue, ListAttributeValue, ListExpressionValue, ListWidgetValue } from "mendix";
 
 export interface TaskBoardContainerProps {
     name: string;
@@ -17,9 +17,11 @@ export interface TaskBoardContainerProps {
     itemDatasource: ListValue;
     itemWidgets: ListWidgetValue;
     itemIdAttr: ListAttributeValue<BigJs.Big | string>;
-    itemSqeNbrAttr: ListAttributeValue<BigJs.Big>;
+    itemSeqNbrAttr: ListAttributeValue<BigJs.Big>;
     linkedToColumnIdAttr: ListAttributeValue<BigJs.Big | string>;
     itemIsDragDisabledAttr?: ListExpressionValue<boolean>;
+    droppedOnColumnIdAttr: EditableValue<BigJs.Big | string>;
+    onDropAction?: ListActionValue;
 }
 
 export interface TaskBoardPreviewProps {
@@ -31,7 +33,9 @@ export interface TaskBoardPreviewProps {
     itemDatasource: {} | null;
     itemWidgets: { widgetCount: number; renderer: ComponentType };
     itemIdAttr: string;
-    itemSqeNbrAttr: string;
+    itemSeqNbrAttr: string;
     linkedToColumnIdAttr: string;
     itemIsDragDisabledAttr: string;
+    droppedOnColumnIdAttr: string;
+    onDropAction: {} | null;
 }

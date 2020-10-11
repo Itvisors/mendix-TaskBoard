@@ -20,6 +20,7 @@ public class TaskBoardContext
 	 */
 	public enum MemberNames
 	{
+		DroppedOnColumnId("DroppedOnColumnId"),
 		TaskBoardContext_TaskBoard("TestModule.TaskBoardContext_TaskBoard"),
 		TaskBoardContext_Account("TestModule.TaskBoardContext_Account");
 
@@ -116,6 +117,42 @@ public class TaskBoardContext
 	{
 		com.mendix.core.Core.delete(context, getMendixObject());
 	}
+	/**
+	 * @return value of DroppedOnColumnId
+	 */
+	public final java.lang.Long getDroppedOnColumnId()
+	{
+		return getDroppedOnColumnId(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of DroppedOnColumnId
+	 */
+	public final java.lang.Long getDroppedOnColumnId(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Long) getMendixObject().getValue(context, MemberNames.DroppedOnColumnId.toString());
+	}
+
+	/**
+	 * Set value of DroppedOnColumnId
+	 * @param droppedoncolumnid
+	 */
+	public final void setDroppedOnColumnId(java.lang.Long droppedoncolumnid)
+	{
+		setDroppedOnColumnId(getContext(), droppedoncolumnid);
+	}
+
+	/**
+	 * Set value of DroppedOnColumnId
+	 * @param context
+	 * @param droppedoncolumnid
+	 */
+	public final void setDroppedOnColumnId(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Long droppedoncolumnid)
+	{
+		getMendixObject().setValue(context, MemberNames.DroppedOnColumnId.toString(), droppedoncolumnid);
+	}
+
 	/**
 	 * @return value of TaskBoardContext_TaskBoard
 	 */

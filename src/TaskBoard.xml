@@ -50,7 +50,7 @@
                     <attributeType name="String"/>
                 </attributeTypes>
             </property>
-            <property key="itemSqeNbrAttr" type="attribute" dataSource="itemDatasource">
+            <property key="itemSeqNbrAttr" type="attribute" dataSource="itemDatasource">
                 <caption>Item seq, nbr.</caption>
                 <description>Item sequence number attribute, will be updated after dropping an item</description>
                 <attributeTypes>
@@ -73,6 +73,27 @@
                 <caption>Is drag disabled</caption>
                 <description>Whether dragging this item is disabled. Optional. By default item is always draggable.</description>
                 <returnType type="Boolean" />
+            </property>
+
+        </propertyGroup>
+    
+        <!-- Drop properties -->
+
+        <propertyGroup caption="Drop">
+            <property key="droppedOnColumnIdAttr" type="attribute">
+                <caption>Dropped on Column ID</caption>
+                <description>Dropped on Column ID attribute</description>
+                <attributeTypes>
+                    <attributeType name="AutoNumber"/>
+                    <attributeType name="Enum"/>
+                    <attributeType name="Integer"/>
+                    <attributeType name="Long"/>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+            <property key="onDropAction" type="action" dataSource="itemDatasource">
+                <caption>On drop action</caption>
+                <description>Configure the action to handle drops. You MUST commit all items in the same column because they may have adjusted sequence numbers</description>
             </property>
 
         </propertyGroup>

@@ -19,11 +19,6 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     private COLUMN_ID_PREFIX = "col-";
     private ITEM_ID_PREFIX = "item-";
 
-    // Temp state update to force a render
-    state = {
-        lastUpdated: new Date()
-    };
-
     onDragEnd = (result: DropResult): void => {
         const { destination, source, draggableId } = result;
 
@@ -53,16 +48,43 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         if (start.columnId === finish.columnId) {
             // Moving within the same column
             start.itemKeyArray.splice(destination.index, 0, draggableId);
+            this.processDropResult(draggableId, start);
         } else {
             // Moving from one column to another
             finish.itemKeyArray.splice(destination.index, 0, draggableId);
+            this.processDropResult(draggableId, finish);
+        }
+    };
+
+    processDropResult(itemId: string, columnData: ColumnData): void {
+        const { columnIdAttr, itemSeqNbrAttr, droppedOnColumnIdAttr, onDropAction } = this.props;
+
+        // Set the sequence number on every item linked to the column.
+        columnData.itemKeyArray.forEach((itemKey, index) => {
+            const itemMendixObject = this.itemMendixDataMap.get(itemKey);
+            if (itemMendixObject) {
+                const seqNbr = index + 1;
+                itemSeqNbrAttr(itemMendixObject).setTextValue("" + seqNbr);
+            }
+        });
+
+        // Set the dropped column ID value on the context.
+        // As we use prefixes on the IDs to make sure they are strings, get the actual value from the Mendix object
+        const columnMendixObject = this.columnMendixDataMap.get(columnData.columnId);
+        if (columnMendixObject) {
+            const columnIdValue = columnIdAttr(columnMendixObject);
+            droppedOnColumnIdAttr.setTextValue("" + columnIdValue.value);
         }
 
-        // Temp state update to force a render
-        this.setState({
-            lastUpdated: new Date()
-        });
-    };
+        // Call the action on the dropped item
+        const droppedItemMendixObject = this.itemMendixDataMap.get(itemId);
+        if (droppedItemMendixObject && onDropAction) {
+            const onDropActionForObject = onDropAction(droppedItemMendixObject);
+            if (onDropActionForObject.canExecute) {
+                onDropActionForObject.execute();
+            }
+        }
+    }
 
     render(): ReactNode {
         console.info("render");
