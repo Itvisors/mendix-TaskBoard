@@ -1,6 +1,6 @@
 import { Component, ReactNode, createElement } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { ColumnData, ColumnItemData } from "../types/CustomTypes";
+import { ColumnData, ColumnDropTargetStatus, ColumnItemData } from "../types/CustomTypes";
 import { Item } from "./Item";
 import { ListWidgetValue, ObjectItem } from "mendix";
 
@@ -8,7 +8,7 @@ export interface ColumnProps {
     columnData: ColumnData;
     columnMendixObject: ObjectItem | undefined;
     items: ColumnItemData[];
-    isDropDisabled: boolean;
+    columnDropStatus: ColumnDropTargetStatus;
     isVertical: boolean;
     columnWidgets: ListWidgetValue;
     itemWidgets: ListWidgetValue;
@@ -17,22 +17,31 @@ export interface ColumnProps {
 export class Column extends Component<ColumnProps> {
     render(): ReactNode {
         const { columnMendixObject } = this.props;
+        let columnClassName = "taskBoardColumn + columnDropStatus" + this.props.columnDropStatus;
+        if (this.props.isVertical) {
+            columnClassName += " taskBoardColumnVertical";
+        }
         return (
-            <div className="taskBoardColumn taskBoardColumnVertical" data-columnid={this.props.columnData.columnId}>
+            <div className={columnClassName} data-columnid={this.props.columnData.columnId}>
                 <div className="taskBoardColumnHeader">
                     {columnMendixObject && this.props.columnWidgets(columnMendixObject)}
                 </div>
-                <Droppable droppableId={this.props.columnData.columnId} isDropDisabled={this.props.isDropDisabled}>
+                <Droppable
+                    droppableId={this.props.columnData.columnId}
+                    isDropDisabled={this.props.columnDropStatus === "NotAllowed"}
+                >
                     {(provided, snapshot) => {
-                        let className = "taskBoardItemList";
+                        let itemListClassName = "taskBoardItemList";
                         if (this.props.isVertical) {
-                            className += " taskBoardItemListVertical";
+                            itemListClassName += " taskBoardItemListVertical";
                         }
                         if (snapshot.isDraggingOver) {
-                            className += " taskBoardItemListDraggingOver";
+                            itemListClassName += " taskBoardItemListDraggingOver";
+                        } else if (snapshot.draggingFromThisWith) {
+                            itemListClassName += " taskBoardItemListDraggingFrom";
                         }
                         return (
-                            <div className={className} ref={provided.innerRef} {...provided.droppableProps}>
+                            <div className={itemListClassName} ref={provided.innerRef} {...provided.droppableProps}>
                                 {this.props.items.map((columnItemData, index) => {
                                     return (
                                         <Item

@@ -23,7 +23,9 @@ public class Column
 		ColumnId("ColumnId"),
 		SeqNbr("SeqNbr"),
 		Name("Name"),
-		Column_TaskBoard("TestModule.Column_TaskBoard");
+		AllowedDropColumnIds("AllowedDropColumnIds"),
+		Column_TaskBoard("TestModule.Column_TaskBoard"),
+		AllowedDropColumns("TestModule.AllowedDropColumns");
 
 		private java.lang.String metaName;
 
@@ -227,6 +229,42 @@ public class Column
 	}
 
 	/**
+	 * @return value of AllowedDropColumnIds
+	 */
+	public final java.lang.String getAllowedDropColumnIds()
+	{
+		return getAllowedDropColumnIds(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of AllowedDropColumnIds
+	 */
+	public final java.lang.String getAllowedDropColumnIds(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.String) getMendixObject().getValue(context, MemberNames.AllowedDropColumnIds.toString());
+	}
+
+	/**
+	 * Set value of AllowedDropColumnIds
+	 * @param alloweddropcolumnids
+	 */
+	public final void setAllowedDropColumnIds(java.lang.String alloweddropcolumnids)
+	{
+		setAllowedDropColumnIds(getContext(), alloweddropcolumnids);
+	}
+
+	/**
+	 * Set value of AllowedDropColumnIds
+	 * @param context
+	 * @param alloweddropcolumnids
+	 */
+	public final void setAllowedDropColumnIds(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String alloweddropcolumnids)
+	{
+		getMendixObject().setValue(context, MemberNames.AllowedDropColumnIds.toString(), alloweddropcolumnids);
+	}
+
+	/**
 	 * @return value of Column_TaskBoard
 	 */
 	public final testmodule.proxies.TaskBoard getColumn_TaskBoard() throws com.mendix.core.CoreException
@@ -267,6 +305,52 @@ public class Column
 			getMendixObject().setValue(context, MemberNames.Column_TaskBoard.toString(), null);
 		else
 			getMendixObject().setValue(context, MemberNames.Column_TaskBoard.toString(), column_taskboard.getMendixObject().getId());
+	}
+
+	/**
+	 * @return value of AllowedDropColumns
+	 */
+	public final java.util.List<testmodule.proxies.Column> getAllowedDropColumns() throws com.mendix.core.CoreException
+	{
+		return getAllowedDropColumns(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of AllowedDropColumns
+	 */
+	@SuppressWarnings("unchecked")
+	public final java.util.List<testmodule.proxies.Column> getAllowedDropColumns(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
+	{
+		java.util.List<testmodule.proxies.Column> result = new java.util.ArrayList<testmodule.proxies.Column>();
+		Object valueObject = getMendixObject().getValue(context, MemberNames.AllowedDropColumns.toString());
+		if (valueObject == null)
+			return result;
+		for (com.mendix.systemwideinterfaces.core.IMendixObject mendixObject : com.mendix.core.Core.retrieveIdList(context, (java.util.List<com.mendix.systemwideinterfaces.core.IMendixIdentifier>) valueObject))
+			result.add(testmodule.proxies.Column.initialize(context, mendixObject));
+		return result;
+	}
+
+	/**
+	 * Set value of AllowedDropColumns
+	 * @param alloweddropcolumns
+	 */
+	public final void setAllowedDropColumns(java.util.List<testmodule.proxies.Column> alloweddropcolumns)
+	{
+		setAllowedDropColumns(getContext(), alloweddropcolumns);
+	}
+
+	/**
+	 * Set value of AllowedDropColumns
+	 * @param context
+	 * @param alloweddropcolumns
+	 */
+	public final void setAllowedDropColumns(com.mendix.systemwideinterfaces.core.IContext context, java.util.List<testmodule.proxies.Column> alloweddropcolumns)
+	{
+		java.util.List<com.mendix.systemwideinterfaces.core.IMendixIdentifier> identifiers = new java.util.ArrayList<com.mendix.systemwideinterfaces.core.IMendixIdentifier>();
+		for (testmodule.proxies.Column proxyObject : alloweddropcolumns)
+			identifiers.add(proxyObject.getMendixObject().getId());
+		getMendixObject().setValue(context, MemberNames.AllowedDropColumns.toString(), identifiers);
 	}
 
 	/**

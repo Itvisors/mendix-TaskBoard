@@ -74,6 +74,12 @@ public class Microflows
 		}
 		return result;
 	}
+	public static void oCH_Column_AcceptsItemsFrom(IContext context, testmodule.proxies.Column _column)
+	{
+		Map<java.lang.String, Object> params = new HashMap<>();
+		params.put("Column", _column == null ? null : _column.getMendixObject());
+		Core.microflowCall("TestModule.OCH_Column_AcceptsItemsFrom").withParams(params).execute(context);
+	}
 	public static administration.proxies.Account sUB_GetCurrentAccount(IContext context)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();

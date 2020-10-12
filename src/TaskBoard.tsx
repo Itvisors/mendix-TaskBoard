@@ -1,10 +1,10 @@
 import { Component, ReactNode, createElement } from "react";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
 import { ValueStatus, ObjectItem } from "mendix";
 
 import { TaskBoardContainerProps } from "../typings/TaskBoardProps";
 import { Column } from "./components/Column";
-import { ColumnData, ItemData, ColumnItemData } from "./types/CustomTypes";
+import { ColumnData, ItemData, ColumnItemData, ColumnDropTargetStatus } from "./types/CustomTypes";
 
 import "./ui/TaskBoard.css";
 
@@ -18,6 +18,13 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
 
     private COLUMN_ID_PREFIX = "col-";
     private ITEM_ID_PREFIX = "item-";
+
+    readonly state = { dragStartColumnId: "" };
+
+    onDragStart = (start: DragStart): void => {
+        const dragStartColumn = this.columnMap.get(start.source.droppableId);
+        this.setState({ dragStartColumnId: dragStartColumn?.columnId });
+    };
 
     onDragEnd = (result: DropResult): void => {
         const { destination, source, draggableId } = result;
@@ -44,7 +51,6 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         // Take the element from the start array
         start.itemKeyArray.splice(source.index, 1);
 
-        console.info("Item " + draggableId + " has been dropped on " + finish.columnId);
         if (start.columnId === finish.columnId) {
             // Moving within the same column
             start.itemKeyArray.splice(destination.index, 0, draggableId);
@@ -84,6 +90,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
                 onDropActionForObject.execute();
             }
         }
+        this.setState({ dragStartColumnId: null });
     }
 
     render(): ReactNode {
@@ -96,7 +103,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             className += " taskBoardContainerVertical";
         }
         return (
-            <DragDropContext onDragEnd={this.onDragEnd}>
+            <DragDropContext /* onDragStart={this.onDragStart} */ onDragEnd={this.onDragEnd}>
                 <div className={className}>
                     {this.columnArray.map(columnData => {
                         return (
@@ -105,7 +112,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
                                 columnData={columnData}
                                 columnMendixObject={this.columnMendixDataMap.get(columnData.columnId)}
                                 items={this.getItems(columnData)}
-                                isDropDisabled={false}
+                                columnDropStatus={this.getColumnDropTargetStatus(columnData)}
                                 isVertical={isVertical}
                                 columnWidgets={columnWidgets}
                                 itemWidgets={itemWidgets}
@@ -134,6 +141,41 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         return items;
     }
 
+    getColumnDropTargetStatus(columnData: ColumnData): ColumnDropTargetStatus {
+        const { dragStartColumnId } = this.state;
+
+        // Currently dragging? Then the value is set.
+        if (!dragStartColumnId) {
+            return "None";
+        }
+
+        // Always allow drop on the same column
+        if (columnData.columnId === dragStartColumnId) {
+            return "Allowed";
+        }
+
+        const dragStartColumn = this.columnMap.get(dragStartColumnId);
+        if (!dragStartColumn) {
+            // This should never happen but we need to tackle the situation.
+            console.error("TaskBoard: Column definition not found for drag start column ID " + dragStartColumnId);
+            return "NotAllowed";
+        }
+
+        if (dragStartColumn.allowedDropColumnKeyArray.length === 0) {
+            return "Allowed";
+        }
+
+        if (
+            dragStartColumn.allowedDropColumnKeyArray.findIndex(allowedDropColumnId => {
+                return allowedDropColumnId === columnData.columnId;
+            }) >= 0
+        ) {
+            return "Allowed";
+        } else {
+            return "NotAllowed";
+        }
+    }
+
     getData(): void {
         const { itemDatasource, columnDatasource } = this.props;
 
@@ -152,7 +194,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     }
 
     getColumnData(): void {
-        const { columnDatasource, columnIdAttr } = this.props;
+        const { columnDatasource, columnIdAttr, allowedDropColumnsAttr } = this.props;
 
         if (!columnDatasource.items) {
             return;
@@ -168,8 +210,19 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             // Create column data object;
             const columnData: ColumnData = {
                 columnId,
-                itemKeyArray: []
+                itemKeyArray: [],
+                allowedDropColumnKeyArray: []
             };
+
+            // Drop allowed on specific columns only?
+            const allowedDropColumnsAttrValue = allowedDropColumnsAttr(columnObject).value;
+            if (allowedDropColumnsAttrValue) {
+                const allowedDropColumnIds = allowedDropColumnsAttrValue.split("|");
+                for (const allowedDropColumnId of allowedDropColumnIds) {
+                    columnData.allowedDropColumnKeyArray.push(this.COLUMN_ID_PREFIX + allowedDropColumnId);
+                }
+            }
+
             // Save it in the map too.
             this.columnMap.set(columnId, columnData);
 

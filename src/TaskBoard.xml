@@ -30,6 +30,13 @@
                     <attributeType name="String"/>
                 </attributeTypes>
             </property>
+            <property key="allowedDropColumnsAttr" type="attribute" dataSource="columnDatasource">
+                <caption>Allowed columns</caption>
+                <description>Items can be dropped in these columns. Concatenate the IDs separated by a |. When empty, items can go to all columns.</description>
+                <attributeTypes>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
 
             <property key="itemDatasource" type="datasource" isList="true">
                 <caption>Item data source</caption>

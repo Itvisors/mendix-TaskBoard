@@ -14,6 +14,7 @@ export interface TaskBoardContainerProps {
     columnDatasource: ListValue;
     columnWidgets: ListWidgetValue;
     columnIdAttr: ListAttributeValue<BigJs.Big | string>;
+    allowedDropColumnsAttr: ListAttributeValue<string>;
     itemDatasource: ListValue;
     itemWidgets: ListWidgetValue;
     itemIdAttr: ListAttributeValue<BigJs.Big | string>;
@@ -30,6 +31,7 @@ export interface TaskBoardPreviewProps {
     columnDatasource: {} | null;
     columnWidgets: { widgetCount: number; renderer: ComponentType };
     columnIdAttr: string;
+    allowedDropColumnsAttr: string;
     itemDatasource: {} | null;
     itemWidgets: { widgetCount: number; renderer: ComponentType };
     itemIdAttr: string;

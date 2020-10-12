@@ -14,14 +14,24 @@
 }
 
 .taskBoardColumn {
-	border: 1px solid #D7D7D7;
     margin: 8px;
-    border: 1px solid lightgrey;
     border-radius: 2px;
 }
 
+.columnDropStatusNone {
+	border: 1px solid #D7D7D7;
+}
+
+.columnDropStatusAllowed {
+	border: 1px solid #76CA02;
+}
+
+.columnDropStatusNotAllowed {
+	border: 1px solid #ED1C24;
+}
+
 .taskBoardColumnVertical {
-    width: 220px;
+    width: 300px;
     display: flex;
     flex-direction: column; /* Flex box with column direction so task list can grow vertically. */
 }
@@ -36,8 +46,12 @@
     background-color: skyblue;
 }
 
+.taskBoardItemListDraggingFrom {
+    background-color: lightyellow;
+}
+
 .taskBoardItemListVertical {
-    min-height: 100px; /* Make sure there is a droppable area. */
+    min-height: 500px; /* Make sure there is a droppable area. */
 }
 
 .taskBoardItem {
