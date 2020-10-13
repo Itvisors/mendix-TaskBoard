@@ -17,3 +17,8 @@ export interface ColumnItemData {
     itemData: ItemData;
     itemMendixObject: ObjectItem;
 }
+
+export interface DropDataItem {
+    itemId: string;
+    seqNbr: number;
+}

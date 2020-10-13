@@ -57,14 +57,6 @@
                     <attributeType name="String"/>
                 </attributeTypes>
             </property>
-            <property key="itemSeqNbrAttr" type="attribute" dataSource="itemDatasource">
-                <caption>Item seq, nbr.</caption>
-                <description>Item sequence number attribute, will be updated after dropping an item</description>
-                <attributeTypes>
-                    <attributeType name="Integer"/>
-                    <attributeType name="Long"/>
-                </attributeTypes>
-            </property>
             <property key="linkedToColumnIdAttr" type="attribute" dataSource="itemDatasource">
                 <caption>In column</caption>
                 <description>Column ID attribute of the column the item is linked to.</description>
@@ -95,6 +87,13 @@
                     <attributeType name="Enum"/>
                     <attributeType name="Integer"/>
                     <attributeType name="Long"/>
+                    <attributeType name="String"/>
+                </attributeTypes>
+            </property>
+            <property key="dropDataAttr" type="attribute">
+                <caption>Drop data</caption>
+                <description>JSON data containing the new sequence numbers of items in the column the item was dropped on.</description>
+                <attributeTypes>
                     <attributeType name="String"/>
                 </attributeTypes>
             </property>
