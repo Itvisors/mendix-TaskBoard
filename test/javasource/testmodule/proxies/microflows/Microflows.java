@@ -15,10 +15,10 @@ import com.mendix.systemwideinterfaces.core.IMendixObject;
 public class Microflows
 {
 	// These are the microflows for the TestModule module
-	public static void aCT_Item_Dropped(IContext context, testmodule.proxies.Item _item, testmodule.proxies.TaskBoardContext _taskBoardContext)
+	public static void aCT_Item_Dropped(IContext context, testmodule.proxies.Item _droppedItem, testmodule.proxies.TaskBoardContext _taskBoardContext)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();
-		params.put("Item", _item == null ? null : _item.getMendixObject());
+		params.put("DroppedItem", _droppedItem == null ? null : _droppedItem.getMendixObject());
 		params.put("TaskBoardContext", _taskBoardContext == null ? null : _taskBoardContext.getMendixObject());
 		Core.microflowCall("TestModule.ACT_Item_Dropped").withParams(params).execute(context);
 	}

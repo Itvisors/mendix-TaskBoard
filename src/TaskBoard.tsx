@@ -108,7 +108,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             className += " taskBoardContainerVertical";
         }
         return (
-            <DragDropContext /* onDragStart={this.onDragStart} */ onDragEnd={this.onDragEnd}>
+            <DragDropContext onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
                 <div className={className}>
                     {this.columnArray.map(columnData => {
                         return (
