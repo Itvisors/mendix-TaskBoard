@@ -91,7 +91,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     }
 
     render(): ReactNode {
-        console.info("render");
+        // console.info("TaskBoard.render");
         const isVertical = true; // set from widget property
         const { columnWidgets, itemWidgets } = this.props;
         this.getData();
@@ -179,13 +179,16 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         const { itemDatasource, columnDatasource, onDropAction } = this.props;
 
         if (itemDatasource.status !== ValueStatus.Available || columnDatasource.status !== ValueStatus.Available) {
+            // console.info("TaskBoard.getData(): No data available (yet)");
             return;
         }
 
         // Do not load new data while drop action is executing because datasource has not yet been refreshed.
         if (onDropAction && onDropAction.isExecuting) {
+            // console.info("TaskBoard.getData(): The on drop action still running, skip reload of the data");
             return;
         }
+        // console.info("TaskBoard.getData(): Reload of the data");
 
         this.columnMendixDataMap.clear();
         this.itemMendixDataMap.clear();
