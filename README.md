@@ -19,6 +19,10 @@ Wrapper around the [react-beautiful-dnd](https://github.com/atlassian/react-beau
 - Configure the item datasource. Make sure the items are returned sorted on the sequence number.
 - Configure the action to handle the drop. 
 - Set the sequence numbers of the items in the column using the passed JSON data. Be sure to check the sample project for an example of this logic.
+- After handling the drop, clear the ID values and drop data on the context.
+
+## Preventing flickering
+Calling the drop action is asynchronous. In first versions of the widget, the dropped items would briefly be visible at the old position while the drop action (your microflow) was running. To fix this, the widget stores the ID of the column the item was dragged from in the context. The drop action **must** clear this value. For numeric IDs, zero is treated as empty. If the dragged from column ID is not cleared, the columns will still show as valid or invalid drop target.
 
 ## Page layout
 The widget can handle scrolling the list during the drag, but only if the page uses a layout without scroll container. Regular layouts have a scroll container, preventing the widget from taking control of scrolling.

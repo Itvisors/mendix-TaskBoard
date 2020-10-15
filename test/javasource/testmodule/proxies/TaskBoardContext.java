@@ -20,6 +20,8 @@ public class TaskBoardContext
 	 */
 	public enum MemberNames
 	{
+		DroppedItemId("DroppedItemId"),
+		DraggedFromColumnId("DraggedFromColumnId"),
 		DroppedOnColumnId("DroppedOnColumnId"),
 		DropData("DropData"),
 		TaskBoardContext_TaskBoard("TestModule.TaskBoardContext_TaskBoard"),
@@ -118,6 +120,78 @@ public class TaskBoardContext
 	{
 		com.mendix.core.Core.delete(context, getMendixObject());
 	}
+	/**
+	 * @return value of DroppedItemId
+	 */
+	public final java.lang.Long getDroppedItemId()
+	{
+		return getDroppedItemId(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of DroppedItemId
+	 */
+	public final java.lang.Long getDroppedItemId(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Long) getMendixObject().getValue(context, MemberNames.DroppedItemId.toString());
+	}
+
+	/**
+	 * Set value of DroppedItemId
+	 * @param droppeditemid
+	 */
+	public final void setDroppedItemId(java.lang.Long droppeditemid)
+	{
+		setDroppedItemId(getContext(), droppeditemid);
+	}
+
+	/**
+	 * Set value of DroppedItemId
+	 * @param context
+	 * @param droppeditemid
+	 */
+	public final void setDroppedItemId(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Long droppeditemid)
+	{
+		getMendixObject().setValue(context, MemberNames.DroppedItemId.toString(), droppeditemid);
+	}
+
+	/**
+	 * @return value of DraggedFromColumnId
+	 */
+	public final java.lang.Long getDraggedFromColumnId()
+	{
+		return getDraggedFromColumnId(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of DraggedFromColumnId
+	 */
+	public final java.lang.Long getDraggedFromColumnId(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Long) getMendixObject().getValue(context, MemberNames.DraggedFromColumnId.toString());
+	}
+
+	/**
+	 * Set value of DraggedFromColumnId
+	 * @param draggedfromcolumnid
+	 */
+	public final void setDraggedFromColumnId(java.lang.Long draggedfromcolumnid)
+	{
+		setDraggedFromColumnId(getContext(), draggedfromcolumnid);
+	}
+
+	/**
+	 * Set value of DraggedFromColumnId
+	 * @param context
+	 * @param draggedfromcolumnid
+	 */
+	public final void setDraggedFromColumnId(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Long draggedfromcolumnid)
+	{
+		getMendixObject().setValue(context, MemberNames.DraggedFromColumnId.toString(), draggedfromcolumnid);
+	}
+
 	/**
 	 * @return value of DroppedOnColumnId
 	 */

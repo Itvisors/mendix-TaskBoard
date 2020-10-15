@@ -19,11 +19,10 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     private COLUMN_ID_PREFIX = "col-";
     private ITEM_ID_PREFIX = "item-";
 
-    readonly state = { dragStartColumnId: "" };
-
     onDragStart = (start: DragStart): void => {
-        const dragStartColumn = this.columnMap.get(start.source.droppableId);
-        this.setState({ dragStartColumnId: dragStartColumn?.columnId });
+        const { draggedFromColumnIdAttr } = this.props;
+        // Set the column ID on the Mendix attribute, remove the prefix.
+        draggedFromColumnIdAttr.setTextValue(start.source.droppableId.substr(this.COLUMN_ID_PREFIX.length));
     };
 
     onDragEnd = (result: DropResult): void => {
@@ -63,39 +62,32 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     };
 
     processDropResult(itemId: string, columnData: ColumnData): void {
-        const { itemIdAttr, columnIdAttr, droppedOnColumnIdAttr, dropDataAttr, onDropAction } = this.props;
+        const { droppedItemIdAttr, droppedOnColumnIdAttr, dropDataAttr, onDropAction } = this.props;
 
-        // Set the sequence number on every item linked to the column.
+        // Set the sequence number on every item linked to the column. Take out the item ID prefix.
         const dropData: DropDataItem[] = [];
         columnData.itemKeyArray.forEach((itemKey, index) => {
-            const itemMendixObject = this.itemMendixDataMap.get(itemKey);
-            if (itemMendixObject) {
-                const seqNbr = index + 1;
-                dropData.push({
-                    itemId: "" + itemIdAttr(itemMendixObject).value,
-                    seqNbr
-                });
-            }
+            const seqNbr = index + 1;
+            dropData.push({
+                itemId: "" + itemKey.substr(this.ITEM_ID_PREFIX.length),
+                seqNbr
+            });
         });
+        // Set the drop data on the context.
         dropDataAttr.setValue(JSON.stringify(dropData));
 
-        // Set the dropped column ID value on the context.
-        // As we use prefixes on the IDs to make sure they are strings, get the actual value from the Mendix object
-        const columnMendixObject = this.columnMendixDataMap.get(columnData.columnId);
-        if (columnMendixObject) {
-            const columnIdValue = columnIdAttr(columnMendixObject);
-            droppedOnColumnIdAttr.setTextValue("" + columnIdValue.value);
-        }
+        // Set the dropped column ID value on the context. Take out the prefix.
+        droppedOnColumnIdAttr.setTextValue(columnData.columnId.substr(this.COLUMN_ID_PREFIX.length));
 
-        // Call the action on the dropped item
-        const droppedItemMendixObject = this.itemMendixDataMap.get(itemId);
-        if (droppedItemMendixObject && onDropAction) {
-            const onDropActionForObject = onDropAction(droppedItemMendixObject);
-            if (onDropActionForObject.canExecute) {
-                onDropActionForObject.execute();
+        // Set the dropped item ID value on the context. Take out the prefix.
+        droppedItemIdAttr.setTextValue(itemId.substr(this.ITEM_ID_PREFIX.length));
+
+        // Call the action
+        if (onDropAction) {
+            if (onDropAction.canExecute) {
+                onDropAction.execute();
             }
         }
-        this.setState({ dragStartColumnId: null });
     }
 
     render(): ReactNode {
@@ -147,22 +139,24 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     }
 
     getColumnDropTargetStatus(columnData: ColumnData): ColumnDropTargetStatus {
-        const { dragStartColumnId } = this.state;
+        const { draggedFromColumnIdAttr } = this.props;
 
-        // Currently dragging? Then the value is set.
-        if (!dragStartColumnId) {
+        // Currently dragging? Then the value is set. For numeric IDs, treat zero as not set
+        if (!draggedFromColumnIdAttr.value || "" + draggedFromColumnIdAttr.value === "0") {
             return "None";
         }
 
+        const draggedFromColumnId = this.COLUMN_ID_PREFIX + draggedFromColumnIdAttr.value;
+
         // Always allow drop on the same column
-        if (columnData.columnId === dragStartColumnId) {
+        if (columnData.columnId === draggedFromColumnId) {
             return "Allowed";
         }
 
-        const dragStartColumn = this.columnMap.get(dragStartColumnId);
+        const dragStartColumn = this.columnMap.get(draggedFromColumnId);
         if (!dragStartColumn) {
             // This should never happen but we need to tackle the situation.
-            console.error("TaskBoard: Column definition not found for drag start column ID " + dragStartColumnId);
+            console.error("TaskBoard: Column definition not found for drag start column ID " + draggedFromColumnId);
             return "NotAllowed";
         }
 
@@ -182,9 +176,14 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     }
 
     getData(): void {
-        const { itemDatasource, columnDatasource } = this.props;
+        const { itemDatasource, columnDatasource, onDropAction } = this.props;
 
         if (itemDatasource.status !== ValueStatus.Available || columnDatasource.status !== ValueStatus.Available) {
+            return;
+        }
+
+        // Do not load new data while drop action is executing because datasource has not yet been refreshed.
+        if (onDropAction && onDropAction.isExecuting) {
             return;
         }
 
