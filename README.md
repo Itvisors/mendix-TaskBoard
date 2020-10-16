@@ -1,20 +1,28 @@
 ## TaskBoard
 Create taskboards or other lists with items, allowing the user to drag the items to reorder them and move the items between columns.
 
-Wrapper around the [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
+Wrapper around [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
 
 ## Features
-- Flexible number of columns
-- Horizontal and vertical orientation of the lists
-- Block items from being dragged
-- Configure where items can be moved to
+- Flexible number of columns.
+- Horizontal and vertical orientation of the lists.
+- Block items from being dragged.
+- Configure where items can be moved to.
+- Automatically scroll the page where necessary.
 
 ## Limitations
 - Unfortunately it is not yet possible for the widget to update the datasource item data directly. 
 
+## Ordering columns and items
+
+### Colums
+The widget will render the columns in the order they appear in the datasource. Sorting on their name often will not be the desired result so you probably want to add a sequence number to the column and order on that.
+
+### Items
+The item entity must have a sequence number to store the item sequence after dragging the items. The item datasource must order the items on sequence number. Note that sequence numbers are unique within one column only.
+
 ## Usage
 - Make sure you have some unique identifier on your column and item entities.
-- The item entity needs to allow for a sequence number, which determines the order of the columns and items.
 - Configure the column datasource.
 - Configure the item datasource. Make sure the items are returned sorted on the sequence number.
 - Configure the action to handle the drop. 
