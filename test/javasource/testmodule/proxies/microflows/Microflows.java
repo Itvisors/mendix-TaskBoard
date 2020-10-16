@@ -45,34 +45,6 @@ public class Microflows
 		IMendixObject result = (IMendixObject)Core.microflowCall("TestModule.DS_TaskBoardContext").withParams(params).execute(context);
 		return result == null ? null : testmodule.proxies.TaskBoardContext.initialize(context, result);
 	}
-	public static java.util.List<testmodule.proxies.Column> dSL_TaskBoardContext_Columns(IContext context, testmodule.proxies.TaskBoardContext _taskBoardContext)
-	{
-		Map<java.lang.String, Object> params = new HashMap<>();
-		params.put("TaskBoardContext", _taskBoardContext == null ? null : _taskBoardContext.getMendixObject());
-		java.util.List<IMendixObject> objs = Core.microflowCall("TestModule.DSL_TaskBoardContext_Columns").withParams(params).execute(context);
-		java.util.List<testmodule.proxies.Column> result = null;
-		if (objs != null)
-		{
-			result = new java.util.ArrayList<>();
-			for (IMendixObject obj : objs)
-				result.add(testmodule.proxies.Column.initialize(context, obj));
-		}
-		return result;
-	}
-	public static java.util.List<testmodule.proxies.Item> dSL_TaskBoardContext_Items(IContext context, testmodule.proxies.TaskBoardContext _taskBoardContext)
-	{
-		Map<java.lang.String, Object> params = new HashMap<>();
-		params.put("TaskBoardContext", _taskBoardContext == null ? null : _taskBoardContext.getMendixObject());
-		java.util.List<IMendixObject> objs = Core.microflowCall("TestModule.DSL_TaskBoardContext_Items").withParams(params).execute(context);
-		java.util.List<testmodule.proxies.Item> result = null;
-		if (objs != null)
-		{
-			result = new java.util.ArrayList<>();
-			for (IMendixObject obj : objs)
-				result.add(testmodule.proxies.Item.initialize(context, obj));
-		}
-		return result;
-	}
 	public static void oCH_Column_AcceptsItemsFrom(IContext context, testmodule.proxies.Column _column)
 	{
 		Map<java.lang.String, Object> params = new HashMap<>();
