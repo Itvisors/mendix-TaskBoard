@@ -28,6 +28,8 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     onDragEnd = (result: DropResult): void => {
         const { destination, source, draggableId } = result;
 
+        // console.info("onDragEnd dragged id " + draggableId);
+
         // No destination, dropped elsewhere, so it is an invalid drop, ignore
         if (!destination) {
             return;
@@ -84,6 +86,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
 
         // Call the action
         if (onDropAction) {
+            // console.info("onDragEnd run onDropAction");
             if (onDropAction.canExecute) {
                 onDropAction.execute();
             }
@@ -188,6 +191,11 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             // console.info("TaskBoard.getData(): The on drop action still running, skip reload of the data");
             return;
         }
+
+        if (!this.checkItemSequence()) {
+            // console.info("TaskBoard.getData(): The items are not (yet) returned in the right sequence");
+            return;
+        }
         // console.info("TaskBoard.getData(): Reload of the data");
 
         this.columnMendixDataMap.clear();
@@ -198,6 +206,30 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
 
         this.getColumnData();
         this.getItemData();
+    }
+
+    checkItemSequence(): boolean {
+        const { itemDatasource, itemSeqNbrAttr } = this.props;
+
+        if (!itemDatasource.items) {
+            return false;
+        }
+
+        let checkSeqNbr = 0;
+        let result = true;
+        // The datasource can be out of sequence after a drop. If the sequence numbers are out of order, skip loading the data.
+        // Note that multiple items can have the same sequence number if they are in different columns.
+        for (const itemObject of itemDatasource.items) {
+            const seqNbr = Number(itemSeqNbrAttr(itemObject).value);
+            if (seqNbr >= checkSeqNbr) {
+                checkSeqNbr = seqNbr;
+                // console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " in sequence");
+            } else {
+                result = false;
+                // console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " out of sequence");
+            }
+        }
+        return result;
     }
 
     getColumnData(): void {
@@ -243,7 +275,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     }
 
     getItemData(): void {
-        const { itemDatasource, itemIdAttr, linkedToColumnIdAttr, itemIsDragDisabledAttr } = this.props;
+        const { itemDatasource, itemIdAttr, itemSeqNbrAttr, linkedToColumnIdAttr, itemIsDragDisabledAttr } = this.props;
 
         if (!itemDatasource.items) {
             return;
@@ -258,6 +290,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             // Create item data object
             const itemData: ItemData = {
                 itemId,
+                seqNbr: Number(itemSeqNbrAttr(itemObject).value),
                 isDragDisabled: itemIsDragDisabledAttr ? itemIsDragDisabledAttr(itemObject).value : false
             };
 

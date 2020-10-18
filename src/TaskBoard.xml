@@ -57,6 +57,14 @@
                     <attributeType name="String"/>
                 </attributeTypes>
             </property>
+            <property key="itemSeqNbrAttr" type="attribute" dataSource="itemDatasource">
+                <caption>Item Seq. Nbr</caption>
+                <description>Item sequence number attribute</description>
+                <attributeTypes>
+                    <attributeType name="Integer"/>
+                    <attributeType name="Long"/>
+                </attributeTypes>
+            </property>
             <property key="linkedToColumnIdAttr" type="attribute" dataSource="itemDatasource">
                 <caption>In column</caption>
                 <description>Column ID attribute of the column the item is linked to.</description>

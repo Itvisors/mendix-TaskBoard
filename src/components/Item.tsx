@@ -11,13 +11,12 @@ export interface ItemProps {
 
 export class Item extends Component<ItemProps> {
     render(): ReactNode {
-        const isDragDisabled = false;
         const { columnItemData } = this.props;
         return (
             <Draggable
                 draggableId={columnItemData.itemData.itemId}
                 index={this.props.index}
-                isDragDisabled={isDragDisabled}
+                isDragDisabled={columnItemData.itemData.isDragDisabled}
             >
                 {(provided, snapshot) => {
                     let className = "taskBoardItem";

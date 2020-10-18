@@ -18,6 +18,7 @@ export interface TaskBoardContainerProps {
     itemDatasource: ListValue;
     itemWidgets: ListWidgetValue;
     itemIdAttr: ListAttributeValue<BigJs.Big | string>;
+    itemSeqNbrAttr: ListAttributeValue<BigJs.Big>;
     linkedToColumnIdAttr: ListAttributeValue<BigJs.Big | string>;
     itemIsDragDisabledAttr?: ListExpressionValue<boolean>;
     droppedItemIdAttr: EditableValue<BigJs.Big | string>;
@@ -37,6 +38,7 @@ export interface TaskBoardPreviewProps {
     itemDatasource: {} | null;
     itemWidgets: { widgetCount: number; renderer: ComponentType };
     itemIdAttr: string;
+    itemSeqNbrAttr: string;
     linkedToColumnIdAttr: string;
     itemIsDragDisabledAttr: string;
     droppedItemIdAttr: string;

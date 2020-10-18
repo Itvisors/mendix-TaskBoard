@@ -4,6 +4,7 @@ export type ColumnDropTargetStatus = "None" | "Allowed" | "NotAllowed";
 
 export interface ItemData {
     itemId: string;
+    seqNbr: number;
     isDragDisabled?: boolean;
 }
 

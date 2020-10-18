@@ -23,6 +23,7 @@ public class Item
 		ItemId("ItemId"),
 		SeqNbr("SeqNbr"),
 		Name("Name"),
+		IsDragDisabled("IsDragDisabled"),
 		Item_TaskBoard("TestModule.Item_TaskBoard"),
 		Item_Column("TestModule.Item_Column");
 
@@ -225,6 +226,42 @@ public class Item
 	public final void setName(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String name)
 	{
 		getMendixObject().setValue(context, MemberNames.Name.toString(), name);
+	}
+
+	/**
+	 * @return value of IsDragDisabled
+	 */
+	public final java.lang.Boolean getIsDragDisabled()
+	{
+		return getIsDragDisabled(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of IsDragDisabled
+	 */
+	public final java.lang.Boolean getIsDragDisabled(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Boolean) getMendixObject().getValue(context, MemberNames.IsDragDisabled.toString());
+	}
+
+	/**
+	 * Set value of IsDragDisabled
+	 * @param isdragdisabled
+	 */
+	public final void setIsDragDisabled(java.lang.Boolean isdragdisabled)
+	{
+		setIsDragDisabled(getContext(), isdragdisabled);
+	}
+
+	/**
+	 * Set value of IsDragDisabled
+	 * @param context
+	 * @param isdragdisabled
+	 */
+	public final void setIsDragDisabled(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Boolean isdragdisabled)
+	{
+		getMendixObject().setValue(context, MemberNames.IsDragDisabled.toString(), isdragdisabled);
 	}
 
 	/**

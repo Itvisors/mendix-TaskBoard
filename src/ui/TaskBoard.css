@@ -34,8 +34,6 @@
     width: 300px;
     display: flex;
     flex-direction: column; /* Flex box with column direction so task list can grow vertically. */
-    max-height: 70vh;
-    overflow-y: auto;
 }
 
 .taskBoardItemList {
@@ -54,6 +52,8 @@
 
 .taskBoardItemListVertical {
     min-height: 500px; /* Make sure there is a droppable area. */
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 .taskBoardItem {
@@ -69,5 +69,5 @@
 }
 
 .taskBoardItemDragDisabled {
-    background-color: grey;
+    background-color: lightgrey;
 }
