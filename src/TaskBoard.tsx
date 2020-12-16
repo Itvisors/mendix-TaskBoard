@@ -1,6 +1,6 @@
 import { Component, ReactNode, createElement } from "react";
 import { DragDropContext, DragStart, DropResult } from "react-beautiful-dnd";
-import { ValueStatus, ObjectItem } from "mendix";
+import { EditableValue, ValueStatus, ObjectItem } from "mendix";
 
 import { TaskBoardContainerProps } from "../typings/TaskBoardProps";
 import { Column } from "./components/Column";
@@ -28,7 +28,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     onDragEnd = (result: DropResult): void => {
         const { destination, source, draggableId } = result;
 
-        console.info("onDragEnd dragged id " + draggableId);
+        // console.info("onDragEnd dragged id " + draggableId);
 
         // No destination, dropped elsewhere, so it is an invalid drop, ignore
         if (!destination) {
@@ -86,7 +86,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
 
         // Call the action
         if (onDropAction) {
-            console.info("onDragEnd run onDropAction");
+            // console.info("onDragEnd run onDropAction");
             if (onDropAction.canExecute) {
                 onDropAction.execute();
             }
@@ -94,7 +94,15 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     }
 
     render(): ReactNode {
-        console.info("TaskBoard.render");
+        // console.info("TaskBoard.render");
+        // Check whether event properties are writable. Common mistake to place the widget in a readonly dataview.
+        if (
+            this.isAttributeReadOnly("droppedItemIdAttr", this.props.droppedItemIdAttr) ||
+            this.isAttributeReadOnly("droppedOnColumnIdAttr", this.props.droppedOnColumnIdAttr) ||
+            this.isAttributeReadOnly("dropDataAttr", this.props.dropDataAttr)
+        ) {
+            return null;
+        }
         const isVertical = true; // set from widget property
         const { columnWidgets, itemWidgets } = this.props;
         this.getData();
@@ -182,21 +190,21 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         const { itemDatasource, columnDatasource, onDropAction } = this.props;
 
         if (itemDatasource.status !== ValueStatus.Available || columnDatasource.status !== ValueStatus.Available) {
-            console.info("TaskBoard.getData(): No data available (yet)");
+            // console.info("TaskBoard.getData(): No data available (yet)");
             return;
         }
 
         // Do not load new data while drop action is executing because datasource has not yet been refreshed.
         if (onDropAction && onDropAction.isExecuting) {
-            console.info("TaskBoard.getData(): The on drop action still running, skip reload of the data");
+            // console.info("TaskBoard.getData(): The on drop action still running, skip reload of the data");
             return;
         }
 
         if (!this.checkItemSequence()) {
-            console.info("TaskBoard.getData(): The items are not (yet) returned in the right sequence");
+            // console.info("TaskBoard.getData(): The items are not (yet) returned in the right sequence");
             return;
         }
-        console.info("TaskBoard.getData(): Reload of the data");
+        // console.info("TaskBoard.getData(): Reload of the data");
 
         this.columnMendixDataMap.clear();
         this.itemMendixDataMap.clear();
@@ -223,10 +231,10 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             const seqNbr = Number(itemSeqNbrAttr(itemObject).value);
             if (seqNbr >= checkSeqNbr) {
                 checkSeqNbr = seqNbr;
-                console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " in sequence");
+                // console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " in sequence");
             } else {
                 result = false;
-                console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " out of sequence");
+                // console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " out of sequence");
             }
         }
         return result;
@@ -307,5 +315,18 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
                 }
             }
         }
+    }
+
+    isAttributeReadOnly(propName: string, prop: EditableValue): boolean {
+        if (!prop) {
+            return false;
+        }
+        if (prop.status !== "available") {
+            return false;
+        }
+        if (prop.readOnly) {
+            console.warn("NativeDraggableList: Property " + propName + " is readonly");
+        }
+        return prop.readOnly;
     }
 }
