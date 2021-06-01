@@ -5,6 +5,9 @@
   "description": "Task board with DnD",
   "copyright": "ITvisors 2020",
   "author": "Marcel Groeneweg",
+  "engines": {
+    "node": ">=12"
+  },
   "config": {
     "projectPath": "./test/",
     "mendixHost": "http://localhost:8080",
@@ -12,8 +15,7 @@
   },
   "packagePath": "itvisors",
   "scripts": {
-    "start": "pluggable-widgets-tools start:server --open",
-    "dev": "pluggable-widgets-tools start:web",
+    "start": "pluggable-widgets-tools start:web",
     "build": "pluggable-widgets-tools build:web",
     "lint": "pluggable-widgets-tools lint",
     "lint:fix": "pluggable-widgets-tools lint:fix",
@@ -22,15 +24,15 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@mendix/pluggable-widgets-tools": "^8.12.0",
-    "@types/big.js": "^4.0.5",
+    "@mendix/pluggable-widgets-tools": "^9.2.0",
+    "@types/big.js": "^6.0.2",
     "@types/classnames": "^2.2.4",
-    "@types/react": "~16.9.0",
+    "@types/react": "~17.0.1",
     "@types/react-beautiful-dnd": "^13.0.0",
-    "@types/react-dom": "~16.9.0"
+    "@types/react-dom": "~17.0.1"
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "react-beautiful-dnd": "^13.0.0"
+    "react-beautiful-dnd": "^13.1.0"
   }
 }

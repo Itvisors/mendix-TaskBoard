@@ -24,7 +24,7 @@ export class Column extends Component<ColumnProps> {
         return (
             <div className={columnClassName} data-columnid={this.props.columnData.columnId}>
                 <div className="taskBoardColumnHeader">
-                    {columnMendixObject && this.props.columnWidgets(columnMendixObject)}
+                    {columnMendixObject && this.props.columnWidgets.get(columnMendixObject)}
                 </div>
                 <Droppable
                     droppableId={this.props.columnData.columnId}

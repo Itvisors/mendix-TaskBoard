@@ -228,7 +228,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         // The datasource can be out of sequence after a drop. If the sequence numbers are out of order, skip loading the data.
         // Note that multiple items can have the same sequence number if they are in different columns.
         for (const itemObject of itemDatasource.items) {
-            const seqNbr = Number(itemSeqNbrAttr(itemObject).value);
+            const seqNbr = Number(itemSeqNbrAttr.get(itemObject).value);
             if (seqNbr >= checkSeqNbr) {
                 checkSeqNbr = seqNbr;
                 // console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " in sequence");
@@ -249,7 +249,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
 
         // We need a column array as well as a column map. So write the column data object to an array and a map.
         this.columnArray = columnDatasource.items.map(columnObject => {
-            const columnId = this.COLUMN_ID_PREFIX + columnIdAttr(columnObject).value;
+            const columnId = this.COLUMN_ID_PREFIX + columnIdAttr.get(columnObject).value;
 
             // Save Mendix object to map for easy access.
             this.columnMendixDataMap.set(columnId, columnObject);
@@ -262,7 +262,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             };
 
             // Drop allowed on specific columns only?
-            const allowedDropColumnsAttrValue = allowedDropColumnsAttr(columnObject).value;
+            const allowedDropColumnsAttrValue = allowedDropColumnsAttr.get(columnObject).value;
             if (allowedDropColumnsAttrValue) {
                 const allowedDropColumnIds = allowedDropColumnsAttrValue.split("|");
                 for (const allowedDropColumnId of allowedDropColumnIds) {
@@ -290,7 +290,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
         }
 
         for (const itemObject of itemDatasource.items) {
-            const itemId = this.ITEM_ID_PREFIX + itemIdAttr(itemObject).value;
+            const itemId = this.ITEM_ID_PREFIX + itemIdAttr.get(itemObject).value;
 
             // Save Mendix object to map for easy access.
             this.itemMendixDataMap.set(itemId, itemObject);
@@ -298,15 +298,15 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
             // Create item data object
             const itemData: ItemData = {
                 itemId,
-                seqNbr: Number(itemSeqNbrAttr(itemObject).value),
-                isDragDisabled: itemIsDragDisabledAttr ? itemIsDragDisabledAttr(itemObject).value : false
+                seqNbr: Number(itemSeqNbrAttr.get(itemObject).value),
+                isDragDisabled: itemIsDragDisabledAttr ? itemIsDragDisabledAttr.get(itemObject).value : false
             };
 
             // Save it in the map
             this.itemMap.set(itemId, itemData);
 
             // If item is linked to a column, add item id to column item key array.
-            const linkedToColumnIdAttrValue = linkedToColumnIdAttr(itemObject).value;
+            const linkedToColumnIdAttrValue = linkedToColumnIdAttr.get(itemObject).value;
             if (linkedToColumnIdAttrValue) {
                 const columnId = this.COLUMN_ID_PREFIX + linkedToColumnIdAttrValue;
                 const columnData = this.columnMap.get(columnId);

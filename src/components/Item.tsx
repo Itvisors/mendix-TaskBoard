@@ -34,7 +34,7 @@ export class Item extends Component<ItemProps> {
                             className={className}
                             data-itemid={columnItemData.itemData.itemId}
                         >
-                            {this.props.itemWidgets(columnItemData.itemMendixObject)}
+                            {this.props.itemWidgets.get(columnItemData.itemMendixObject)}
                         </div>
                     );
                 }}
