@@ -24,7 +24,7 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@mendix/pluggable-widgets-tools": "^9.2.0",
+    "@mendix/pluggable-widgets-tools": "^9.4.0",
     "@types/big.js": "^6.0.2",
     "@types/classnames": "^2.2.4",
     "@types/react": "~17.0.1",

@@ -32,11 +32,11 @@ export interface TaskBoardContainerProps {
 export interface TaskBoardPreviewProps {
     class: string;
     style: string;
-    columnDatasource: {} | null;
+    columnDatasource: {} | { type: string } | null;
     columnWidgets: { widgetCount: number; renderer: ComponentType<{caption?: string}> };
     columnIdAttr: string;
     allowedDropColumnsAttr: string;
-    itemDatasource: {} | null;
+    itemDatasource: {} | { type: string } | null;
     itemWidgets: { widgetCount: number; renderer: ComponentType<{caption?: string}> };
     itemIdAttr: string;
     itemSeqNbrAttr: string;
