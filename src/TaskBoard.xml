@@ -5,8 +5,7 @@
         xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../node_modules/mendix/custom_widget.xsd">
     <name>Task Board</name>
     <description>Task board with DnD</description>
-    <icon>iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJUExURQAAADAiTQAAAFVmEukAAAADdFJOU///ANfKDUEAAAAJcEhZcwAAEnMAABJzAYwiuQcAAAB2SURBVEhL7Y/RDoAgCACL///ocCg2ER4UY23cAzXO2/SCRULCWwN1/ZOEheXSA7TVnUOIH6ZKy0WGA/2IJDbEwbC03HYooK3uHN/4kpbbDgW01Z3jGwtVHg0Fx0McjS6PhoIMM+Q5kmGG/wvn0JE5MeEaX4cAD2FOFHN/hmBBAAAAAElFTkSuQmCC
-    </icon>
+    <studioProCategory>Data containers</studioProCategory>
     <properties>
     
         <!-- Datasource properties -->

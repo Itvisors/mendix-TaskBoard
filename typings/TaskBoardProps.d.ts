@@ -33,11 +33,11 @@ export interface TaskBoardPreviewProps {
     class: string;
     style: string;
     columnDatasource: {} | { type: string } | null;
-    columnWidgets: { widgetCount: number; renderer: ComponentType<{caption?: string}> };
+    columnWidgets: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     columnIdAttr: string;
     allowedDropColumnsAttr: string;
     itemDatasource: {} | { type: string } | null;
-    itemWidgets: { widgetCount: number; renderer: ComponentType<{caption?: string}> };
+    itemWidgets: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     itemIdAttr: string;
     itemSeqNbrAttr: string;
     linkedToColumnIdAttr: string;
