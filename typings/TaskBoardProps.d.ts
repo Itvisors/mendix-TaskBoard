@@ -30,8 +30,10 @@ export interface TaskBoardContainerProps {
 }
 
 export interface TaskBoardPreviewProps {
-    class: string;
+    className: string;
     style: string;
+    styleObject?: CSSProperties;
+    readOnly: boolean;
     columnDatasource: {} | { type: string } | null;
     columnWidgets: { widgetCount: number; renderer: ComponentType<{ caption?: string }> };
     columnIdAttr: string;
