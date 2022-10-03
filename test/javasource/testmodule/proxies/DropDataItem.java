@@ -23,7 +23,7 @@ public class DropDataItem
 		itemId("itemId"),
 		seqNbr("seqNbr");
 
-		private java.lang.String metaName;
+		private final java.lang.String metaName;
 
 		MemberNames(java.lang.String s)
 		{
@@ -39,15 +39,17 @@ public class DropDataItem
 
 	public DropDataItem(com.mendix.systemwideinterfaces.core.IContext context)
 	{
-		this(context, com.mendix.core.Core.instantiate(context, "TestModule.DropDataItem"));
+		this(context, com.mendix.core.Core.instantiate(context, entityName));
 	}
 
 	protected DropDataItem(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject dropDataItemMendixObject)
 	{
-		if (dropDataItemMendixObject == null)
+		if (dropDataItemMendixObject == null) {
 			throw new java.lang.IllegalArgumentException("The given object cannot be null.");
-		if (!com.mendix.core.Core.isSubClassOf("TestModule.DropDataItem", dropDataItemMendixObject.getType()))
-			throw new java.lang.IllegalArgumentException("The given object is not a TestModule.DropDataItem");
+		}
+		if (!com.mendix.core.Core.isSubClassOf(entityName, dropDataItemMendixObject.getType())) {
+			throw new java.lang.IllegalArgumentException(String.format("The given object is not a %s", entityName));
+		}	
 
 		this.dropDataItemMendixObject = dropDataItemMendixObject;
 		this.context = context;
@@ -65,6 +67,9 @@ public class DropDataItem
 	/**
 	 * Initialize a proxy using context (recommended). This context will be used for security checking when the get- and set-methods without context parameters are called.
 	 * The get- and set-methods with context parameter should be used when for instance sudo access is necessary (IContext.createSudoClone() can be used to obtain sudo access).
+	 * @param context The context to be used
+	 * @param mendixObject The Mendix object for the new instance
+	 * @return a new instance of this proxy class
 	 */
 	public static testmodule.proxies.DropDataItem initialize(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject mendixObject)
 	{
@@ -79,6 +84,7 @@ public class DropDataItem
 
 	/**
 	 * Commit the changes made on this proxy object.
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final void commit() throws com.mendix.core.CoreException
 	{
@@ -87,6 +93,7 @@ public class DropDataItem
 
 	/**
 	 * Commit the changes made on this proxy object using the specified context.
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final void commit(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
@@ -199,9 +206,9 @@ public class DropDataItem
 	@java.lang.Override
 	public boolean equals(Object obj)
 	{
-		if (obj == this)
+		if (obj == this) {
 			return true;
-
+		}
 		if (obj != null && getClass().equals(obj.getClass()))
 		{
 			final testmodule.proxies.DropDataItem that = (testmodule.proxies.DropDataItem) obj;
@@ -221,7 +228,7 @@ public class DropDataItem
 	 */
 	public static java.lang.String getType()
 	{
-		return "TestModule.DropDataItem";
+		return entityName;
 	}
 
 	/**

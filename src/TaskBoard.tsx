@@ -15,6 +15,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     private columnArray: ColumnData[] = [];
     private columnMap = new Map<string, ColumnData>();
     private columnIndexMap = new Map<string, number>();
+    private lastDropResult: DropResult | undefined;
 
     private COLUMN_ID_PREFIX = "col-";
     private ITEM_ID_PREFIX = "item-";
@@ -27,6 +28,7 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
 
     onDragEnd = (result: DropResult): void => {
         const { destination, source, draggableId } = result;
+        this.lastDropResult = result;
 
         // console.info("onDragEnd dragged id " + draggableId);
 
@@ -217,24 +219,55 @@ export default class TaskBoard extends Component<TaskBoardContainerProps> {
     }
 
     checkItemSequence(): boolean {
-        const { itemDatasource, itemSeqNbrAttr } = this.props;
+        const { itemDatasource, itemSeqNbrAttr, itemIdAttr, linkedToColumnIdAttr } = this.props;
 
         if (!itemDatasource.items) {
+            // console.info("TaskBoard.checkItemSequence(): No item data");
             return false;
         }
 
-        let checkSeqNbr = 0;
+        if (!this.lastDropResult) {
+            // console.info("TaskBoard.checkItemSequence(): No last drop result data");
+            return true;
+        }
+        // console.info("TaskBoard.checkItemSequence: Lastdrop result: " + JSON.stringify(this.lastDropResult));
+
         let result = true;
+        const destinationIndex = this.lastDropResult.destination ? this.lastDropResult.destination.index + 1 : 0;
+        const destinationColumnId = this.lastDropResult.destination?.droppableId;
         // The datasource can be out of sequence after a drop. If the sequence numbers are out of order, skip loading the data.
         // Note that multiple items can have the same sequence number if they are in different columns.
         for (const itemObject of itemDatasource.items) {
-            const seqNbr = Number(itemSeqNbrAttr.get(itemObject).value);
-            if (seqNbr >= checkSeqNbr) {
-                checkSeqNbr = seqNbr;
-                // console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " in sequence");
-            } else {
-                result = false;
-                // console.info("TaskBoard.checkItemSequence: SeqNbr " + seqNbr + " out of sequence");
+            const itemSeqNbr = Number(itemSeqNbrAttr.get(itemObject).value);
+            const itemId = this.ITEM_ID_PREFIX + itemIdAttr.get(itemObject).value;
+            const linkedToColumnId = this.COLUMN_ID_PREFIX + linkedToColumnIdAttr.get(itemObject).value;
+            if (itemId === this.lastDropResult.draggableId) {
+                if (itemSeqNbr === destinationIndex && linkedToColumnId === destinationColumnId) {
+                    this.lastDropResult = undefined;
+                    // console.info(
+                    //     "TaskBoard.checkItemSequence: Item " +
+                    //         itemId +
+                    //         " with seq.nbr " +
+                    //         itemSeqNbr +
+                    //         " in column" +
+                    //         linkedToColumnId +
+                    //         " has been updated"
+                    // );
+                    // The break could be moved after the if but having it insize the if makes enabling the console log easier.
+                    break;
+                } else {
+                    // console.info(
+                    //     "TaskBoard.checkItemSequence: Item " +
+                    //         itemId +
+                    //         " with seq.nbr " +
+                    //         itemSeqNbr +
+                    //         " in column" +
+                    //         linkedToColumnId +
+                    //         " has not yet been updated"
+                    // );
+                    result = false;
+                    break;
+                }
             }
         }
         return result;

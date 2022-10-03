@@ -27,7 +27,7 @@ public class Column
 		Column_TaskBoard("TestModule.Column_TaskBoard"),
 		AllowedDropColumns("TestModule.AllowedDropColumns");
 
-		private java.lang.String metaName;
+		private final java.lang.String metaName;
 
 		MemberNames(java.lang.String s)
 		{
@@ -43,15 +43,17 @@ public class Column
 
 	public Column(com.mendix.systemwideinterfaces.core.IContext context)
 	{
-		this(context, com.mendix.core.Core.instantiate(context, "TestModule.Column"));
+		this(context, com.mendix.core.Core.instantiate(context, entityName));
 	}
 
 	protected Column(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject columnMendixObject)
 	{
-		if (columnMendixObject == null)
+		if (columnMendixObject == null) {
 			throw new java.lang.IllegalArgumentException("The given object cannot be null.");
-		if (!com.mendix.core.Core.isSubClassOf("TestModule.Column", columnMendixObject.getType()))
-			throw new java.lang.IllegalArgumentException("The given object is not a TestModule.Column");
+		}
+		if (!com.mendix.core.Core.isSubClassOf(entityName, columnMendixObject.getType())) {
+			throw new java.lang.IllegalArgumentException(String.format("The given object is not a %s", entityName));
+		}	
 
 		this.columnMendixObject = columnMendixObject;
 		this.context = context;
@@ -69,6 +71,9 @@ public class Column
 	/**
 	 * Initialize a proxy using context (recommended). This context will be used for security checking when the get- and set-methods without context parameters are called.
 	 * The get- and set-methods with context parameter should be used when for instance sudo access is necessary (IContext.createSudoClone() can be used to obtain sudo access).
+	 * @param context The context to be used
+	 * @param mendixObject The Mendix object for the new instance
+	 * @return a new instance of this proxy class
 	 */
 	public static testmodule.proxies.Column initialize(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject mendixObject)
 	{
@@ -83,14 +88,16 @@ public class Column
 
 	public static java.util.List<testmodule.proxies.Column> load(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String xpathConstraint) throws com.mendix.core.CoreException
 	{
-		java.util.List<testmodule.proxies.Column> result = new java.util.ArrayList<testmodule.proxies.Column>();
-		for (com.mendix.systemwideinterfaces.core.IMendixObject obj : com.mendix.core.Core.retrieveXPathQuery(context, "//TestModule.Column" + xpathConstraint))
-			result.add(testmodule.proxies.Column.initialize(context, obj));
-		return result;
+		return com.mendix.core.Core.createXPathQuery(String.format("//%1$s%2$s", entityName, xpathConstraint))
+			.execute(context)
+			.stream()
+			.map(obj -> testmodule.proxies.Column.initialize(context, obj))
+			.collect(java.util.stream.Collectors.toList());
 	}
 
 	/**
 	 * Commit the changes made on this proxy object.
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final void commit() throws com.mendix.core.CoreException
 	{
@@ -99,6 +106,7 @@ public class Column
 
 	/**
 	 * Commit the changes made on this proxy object using the specified context.
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final void commit(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
@@ -265,6 +273,7 @@ public class Column
 	}
 
 	/**
+	 * @throws com.mendix.core.CoreException
 	 * @return value of Column_TaskBoard
 	 */
 	public final testmodule.proxies.TaskBoard getColumn_TaskBoard() throws com.mendix.core.CoreException
@@ -275,13 +284,15 @@ public class Column
 	/**
 	 * @param context
 	 * @return value of Column_TaskBoard
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final testmodule.proxies.TaskBoard getColumn_TaskBoard(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
 		testmodule.proxies.TaskBoard result = null;
 		com.mendix.systemwideinterfaces.core.IMendixIdentifier identifier = getMendixObject().getValue(context, MemberNames.Column_TaskBoard.toString());
-		if (identifier != null)
+		if (identifier != null) {
 			result = testmodule.proxies.TaskBoard.load(context, identifier);
+		}
 		return result;
 	}
 
@@ -301,13 +312,15 @@ public class Column
 	 */
 	public final void setColumn_TaskBoard(com.mendix.systemwideinterfaces.core.IContext context, testmodule.proxies.TaskBoard column_taskboard)
 	{
-		if (column_taskboard == null)
+		if (column_taskboard == null) {
 			getMendixObject().setValue(context, MemberNames.Column_TaskBoard.toString(), null);
-		else
+		} else {
 			getMendixObject().setValue(context, MemberNames.Column_TaskBoard.toString(), column_taskboard.getMendixObject().getId());
+		}
 	}
 
 	/**
+	 * @throws com.mendix.core.CoreException
 	 * @return value of AllowedDropColumns
 	 */
 	public final java.util.List<testmodule.proxies.Column> getAllowedDropColumns() throws com.mendix.core.CoreException
@@ -318,16 +331,19 @@ public class Column
 	/**
 	 * @param context
 	 * @return value of AllowedDropColumns
+	 * @throws com.mendix.core.CoreException
 	 */
 	@SuppressWarnings("unchecked")
 	public final java.util.List<testmodule.proxies.Column> getAllowedDropColumns(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
-		java.util.List<testmodule.proxies.Column> result = new java.util.ArrayList<testmodule.proxies.Column>();
+		java.util.List<testmodule.proxies.Column> result = new java.util.ArrayList<>();
 		Object valueObject = getMendixObject().getValue(context, MemberNames.AllowedDropColumns.toString());
-		if (valueObject == null)
+		if (valueObject == null) {
 			return result;
-		for (com.mendix.systemwideinterfaces.core.IMendixObject mendixObject : com.mendix.core.Core.retrieveIdList(context, (java.util.List<com.mendix.systemwideinterfaces.core.IMendixIdentifier>) valueObject))
+		}
+		for (com.mendix.systemwideinterfaces.core.IMendixObject mendixObject : com.mendix.core.Core.retrieveIdList(context, (java.util.List<com.mendix.systemwideinterfaces.core.IMendixIdentifier>) valueObject)) {
 			result.add(testmodule.proxies.Column.initialize(context, mendixObject));
+		}
 		return result;
 	}
 
@@ -347,9 +363,11 @@ public class Column
 	 */
 	public final void setAllowedDropColumns(com.mendix.systemwideinterfaces.core.IContext context, java.util.List<testmodule.proxies.Column> alloweddropcolumns)
 	{
-		java.util.List<com.mendix.systemwideinterfaces.core.IMendixIdentifier> identifiers = new java.util.ArrayList<com.mendix.systemwideinterfaces.core.IMendixIdentifier>();
-		for (testmodule.proxies.Column proxyObject : alloweddropcolumns)
-			identifiers.add(proxyObject.getMendixObject().getId());
+		var identifiers = alloweddropcolumns
+			.stream()
+			.map(proxyObject -> proxyObject.getMendixObject().getId())
+			.collect(java.util.stream.Collectors.toList());
+		
 		getMendixObject().setValue(context, MemberNames.AllowedDropColumns.toString(), identifiers);
 	}
 
@@ -372,9 +390,9 @@ public class Column
 	@java.lang.Override
 	public boolean equals(Object obj)
 	{
-		if (obj == this)
+		if (obj == this) {
 			return true;
-
+		}
 		if (obj != null && getClass().equals(obj.getClass()))
 		{
 			final testmodule.proxies.Column that = (testmodule.proxies.Column) obj;
@@ -394,7 +412,7 @@ public class Column
 	 */
 	public static java.lang.String getType()
 	{
-		return "TestModule.Column";
+		return entityName;
 	}
 
 	/**

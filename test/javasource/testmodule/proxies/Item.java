@@ -27,7 +27,7 @@ public class Item
 		Item_TaskBoard("TestModule.Item_TaskBoard"),
 		Item_Column("TestModule.Item_Column");
 
-		private java.lang.String metaName;
+		private final java.lang.String metaName;
 
 		MemberNames(java.lang.String s)
 		{
@@ -43,15 +43,17 @@ public class Item
 
 	public Item(com.mendix.systemwideinterfaces.core.IContext context)
 	{
-		this(context, com.mendix.core.Core.instantiate(context, "TestModule.Item"));
+		this(context, com.mendix.core.Core.instantiate(context, entityName));
 	}
 
 	protected Item(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject itemMendixObject)
 	{
-		if (itemMendixObject == null)
+		if (itemMendixObject == null) {
 			throw new java.lang.IllegalArgumentException("The given object cannot be null.");
-		if (!com.mendix.core.Core.isSubClassOf("TestModule.Item", itemMendixObject.getType()))
-			throw new java.lang.IllegalArgumentException("The given object is not a TestModule.Item");
+		}
+		if (!com.mendix.core.Core.isSubClassOf(entityName, itemMendixObject.getType())) {
+			throw new java.lang.IllegalArgumentException(String.format("The given object is not a %s", entityName));
+		}	
 
 		this.itemMendixObject = itemMendixObject;
 		this.context = context;
@@ -69,6 +71,9 @@ public class Item
 	/**
 	 * Initialize a proxy using context (recommended). This context will be used for security checking when the get- and set-methods without context parameters are called.
 	 * The get- and set-methods with context parameter should be used when for instance sudo access is necessary (IContext.createSudoClone() can be used to obtain sudo access).
+	 * @param context The context to be used
+	 * @param mendixObject The Mendix object for the new instance
+	 * @return a new instance of this proxy class
 	 */
 	public static testmodule.proxies.Item initialize(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject mendixObject)
 	{
@@ -83,14 +88,16 @@ public class Item
 
 	public static java.util.List<testmodule.proxies.Item> load(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String xpathConstraint) throws com.mendix.core.CoreException
 	{
-		java.util.List<testmodule.proxies.Item> result = new java.util.ArrayList<testmodule.proxies.Item>();
-		for (com.mendix.systemwideinterfaces.core.IMendixObject obj : com.mendix.core.Core.retrieveXPathQuery(context, "//TestModule.Item" + xpathConstraint))
-			result.add(testmodule.proxies.Item.initialize(context, obj));
-		return result;
+		return com.mendix.core.Core.createXPathQuery(String.format("//%1$s%2$s", entityName, xpathConstraint))
+			.execute(context)
+			.stream()
+			.map(obj -> testmodule.proxies.Item.initialize(context, obj))
+			.collect(java.util.stream.Collectors.toList());
 	}
 
 	/**
 	 * Commit the changes made on this proxy object.
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final void commit() throws com.mendix.core.CoreException
 	{
@@ -99,6 +106,7 @@ public class Item
 
 	/**
 	 * Commit the changes made on this proxy object using the specified context.
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final void commit(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
@@ -265,6 +273,7 @@ public class Item
 	}
 
 	/**
+	 * @throws com.mendix.core.CoreException
 	 * @return value of Item_TaskBoard
 	 */
 	public final testmodule.proxies.TaskBoard getItem_TaskBoard() throws com.mendix.core.CoreException
@@ -275,13 +284,15 @@ public class Item
 	/**
 	 * @param context
 	 * @return value of Item_TaskBoard
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final testmodule.proxies.TaskBoard getItem_TaskBoard(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
 		testmodule.proxies.TaskBoard result = null;
 		com.mendix.systemwideinterfaces.core.IMendixIdentifier identifier = getMendixObject().getValue(context, MemberNames.Item_TaskBoard.toString());
-		if (identifier != null)
+		if (identifier != null) {
 			result = testmodule.proxies.TaskBoard.load(context, identifier);
+		}
 		return result;
 	}
 
@@ -301,13 +312,15 @@ public class Item
 	 */
 	public final void setItem_TaskBoard(com.mendix.systemwideinterfaces.core.IContext context, testmodule.proxies.TaskBoard item_taskboard)
 	{
-		if (item_taskboard == null)
+		if (item_taskboard == null) {
 			getMendixObject().setValue(context, MemberNames.Item_TaskBoard.toString(), null);
-		else
+		} else {
 			getMendixObject().setValue(context, MemberNames.Item_TaskBoard.toString(), item_taskboard.getMendixObject().getId());
+		}
 	}
 
 	/**
+	 * @throws com.mendix.core.CoreException
 	 * @return value of Item_Column
 	 */
 	public final testmodule.proxies.Column getItem_Column() throws com.mendix.core.CoreException
@@ -318,13 +331,15 @@ public class Item
 	/**
 	 * @param context
 	 * @return value of Item_Column
+	 * @throws com.mendix.core.CoreException
 	 */
 	public final testmodule.proxies.Column getItem_Column(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
 	{
 		testmodule.proxies.Column result = null;
 		com.mendix.systemwideinterfaces.core.IMendixIdentifier identifier = getMendixObject().getValue(context, MemberNames.Item_Column.toString());
-		if (identifier != null)
+		if (identifier != null) {
 			result = testmodule.proxies.Column.load(context, identifier);
+		}
 		return result;
 	}
 
@@ -344,10 +359,11 @@ public class Item
 	 */
 	public final void setItem_Column(com.mendix.systemwideinterfaces.core.IContext context, testmodule.proxies.Column item_column)
 	{
-		if (item_column == null)
+		if (item_column == null) {
 			getMendixObject().setValue(context, MemberNames.Item_Column.toString(), null);
-		else
+		} else {
 			getMendixObject().setValue(context, MemberNames.Item_Column.toString(), item_column.getMendixObject().getId());
+		}
 	}
 
 	/**
@@ -369,9 +385,9 @@ public class Item
 	@java.lang.Override
 	public boolean equals(Object obj)
 	{
-		if (obj == this)
+		if (obj == this) {
 			return true;
-
+		}
 		if (obj != null && getClass().equals(obj.getClass()))
 		{
 			final testmodule.proxies.Item that = (testmodule.proxies.Item) obj;
@@ -391,7 +407,7 @@ public class Item
 	 */
 	public static java.lang.String getType()
 	{
-		return "TestModule.Item";
+		return entityName;
 	}
 
 	/**
